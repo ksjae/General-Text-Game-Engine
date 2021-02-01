@@ -15,6 +15,14 @@
 		1B1FA43525C7A1C1004D6078 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B1FA40A25C7A1C0004D6078 /* ContentView.swift */; };
 		1B1FA43625C7A1C1004D6078 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA40B25C7A1C1004D6078 /* Assets.xcassets */; };
 		1B1FA43725C7A1C1004D6078 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA40B25C7A1C1004D6078 /* Assets.xcassets */; };
+		1B1FA44D25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44B25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf */; };
+		1B1FA44E25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44B25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf */; };
+		1B1FA44F25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44B25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf */; };
+		1B1FA45025C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44B25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf */; };
+		1B1FA45125C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */; };
+		1B1FA45225C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */; };
+		1B1FA45325C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */; };
+		1B1FA45425C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +57,8 @@
 		1B1FA42B25C7A1C1004D6078 /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1B1FA42F25C7A1C1004D6078 /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		1B1FA43125C7A1C1004D6078 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1B1FA44B25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "KoPubWorld Batang_Pro Medium.otf"; sourceTree = "<group>"; };
+		1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "KoPubWorld Batang_Pro Light.otf"; path = "Shared/Fonts/KoPubWorld Batang_Pro Light.otf"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,6 +110,7 @@
 			children = (
 				1B1FA40925C7A1C0004D6078 /* Text_GameApp.swift */,
 				1B1FA40A25C7A1C0004D6078 /* ContentView.swift */,
+				1B1FA44A25C7ECE8004D6078 /* Fonts */,
 				1B1FA40B25C7A1C1004D6078 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -149,6 +160,15 @@
 				1B1FA43125C7A1C1004D6078 /* Info.plist */,
 			);
 			path = "Tests macOS";
+			sourceTree = "<group>";
+		};
+		1B1FA44A25C7ECE8004D6078 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */,
+				1B1FA44B25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -275,6 +295,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B1FA44D25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf in Resources */,
+				1B1FA45125C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */,
 				1B1FA43625C7A1C1004D6078 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -283,6 +305,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B1FA44E25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf in Resources */,
+				1B1FA45225C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */,
 				1B1FA43725C7A1C1004D6078 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,6 +315,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B1FA45325C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */,
+				1B1FA44F25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,6 +324,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B1FA45425C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */,
+				1B1FA45025C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
