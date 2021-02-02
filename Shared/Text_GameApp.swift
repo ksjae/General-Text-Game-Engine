@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Text_GameApp: App {
+    
+    @StateObject var viewRouter = ViewRouter()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView(viewRouter: ViewRouter())
         }
     }
 }

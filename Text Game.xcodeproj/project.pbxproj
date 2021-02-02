@@ -23,6 +23,18 @@
 		1B1FA45225C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */; };
 		1B1FA45325C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */; };
 		1B1FA45425C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */; };
+		1B3A837125C9616000C09BB1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A837025C9616000C09BB1 /* MainView.swift */; };
+		1B3A837225C9616000C09BB1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A837025C9616000C09BB1 /* MainView.swift */; };
+		1B3A837325C9616000C09BB1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A837025C9616000C09BB1 /* MainView.swift */; };
+		1B3A837425C9616000C09BB1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A837025C9616000C09BB1 /* MainView.swift */; };
+		1B3A837A25C9618600C09BB1 /* IntroductionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A837925C9618600C09BB1 /* IntroductionView.swift */; };
+		1B3A837B25C9618600C09BB1 /* IntroductionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A837925C9618600C09BB1 /* IntroductionView.swift */; };
+		1B3A837C25C9618600C09BB1 /* IntroductionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A837925C9618600C09BB1 /* IntroductionView.swift */; };
+		1B3A837D25C9618600C09BB1 /* IntroductionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A837925C9618600C09BB1 /* IntroductionView.swift */; };
+		1B3A838725C962B200C09BB1 /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A838625C962B200C09BB1 /* ViewRouter.swift */; };
+		1B3A838825C962B200C09BB1 /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A838625C962B200C09BB1 /* ViewRouter.swift */; };
+		1B3A838925C962B200C09BB1 /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A838625C962B200C09BB1 /* ViewRouter.swift */; };
+		1B3A838A25C962B200C09BB1 /* ViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A838625C962B200C09BB1 /* ViewRouter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +71,9 @@
 		1B1FA43125C7A1C1004D6078 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1B1FA44B25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "KoPubWorld Batang_Pro Medium.otf"; sourceTree = "<group>"; };
 		1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "KoPubWorld Batang_Pro Light.otf"; path = "Shared/Fonts/KoPubWorld Batang_Pro Light.otf"; sourceTree = SOURCE_ROOT; };
+		1B3A837025C9616000C09BB1 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		1B3A837925C9618600C09BB1 /* IntroductionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroductionView.swift; sourceTree = "<group>"; };
+		1B3A838625C962B200C09BB1 /* ViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewRouter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +125,9 @@
 			children = (
 				1B1FA40925C7A1C0004D6078 /* Text_GameApp.swift */,
 				1B1FA40A25C7A1C0004D6078 /* ContentView.swift */,
+				1B3A837925C9618600C09BB1 /* IntroductionView.swift */,
+				1B3A837025C9616000C09BB1 /* MainView.swift */,
+				1B3A838625C962B200C09BB1 /* ViewRouter.swift */,
 				1B1FA44A25C7ECE8004D6078 /* Fonts */,
 				1B1FA40B25C7A1C1004D6078 /* Assets.xcassets */,
 			);
@@ -336,7 +354,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B3A838725C962B200C09BB1 /* ViewRouter.swift in Sources */,
 				1B1FA43425C7A1C1004D6078 /* ContentView.swift in Sources */,
+				1B3A837125C9616000C09BB1 /* MainView.swift in Sources */,
+				1B3A837A25C9618600C09BB1 /* IntroductionView.swift in Sources */,
 				1B1FA43225C7A1C1004D6078 /* Text_GameApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,7 +366,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B3A838825C962B200C09BB1 /* ViewRouter.swift in Sources */,
 				1B1FA43525C7A1C1004D6078 /* ContentView.swift in Sources */,
+				1B3A837225C9616000C09BB1 /* MainView.swift in Sources */,
+				1B3A837B25C9618600C09BB1 /* IntroductionView.swift in Sources */,
 				1B1FA43325C7A1C1004D6078 /* Text_GameApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -355,6 +379,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B1FA42525C7A1C1004D6078 /* Tests_iOS.swift in Sources */,
+				1B3A837C25C9618600C09BB1 /* IntroductionView.swift in Sources */,
+				1B3A837325C9616000C09BB1 /* MainView.swift in Sources */,
+				1B3A838925C962B200C09BB1 /* ViewRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +390,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1B1FA43025C7A1C1004D6078 /* Tests_macOS.swift in Sources */,
+				1B3A837D25C9618600C09BB1 /* IntroductionView.swift in Sources */,
+				1B3A837425C9616000C09BB1 /* MainView.swift in Sources */,
+				1B3A838A25C962B200C09BB1 /* ViewRouter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
