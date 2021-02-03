@@ -49,14 +49,25 @@ struct IntroductionView: View {
      */
     @StateObject var viewRouter: ViewRouter
     
+    @State private var selectedGender = 1
+    @State private var selectedRace = 1
+    @State private var selectedClass = 1
+    
     var body: some View {
+        
         ScrollView {
             VStack(alignment: .center) {
 
                 VStack {
-                    Text("Welcome to")
-                        .fontWeight(.black)
-                        .font(.system(size: 36))
+                    if let _ = UserDefaults.standard.string(forKey: "hasPlayed") {
+                        Text("Welcome back to")
+                            .fontWeight(.black)
+                            .font(.system(size: 36))
+                    } else {
+                        Text("Welcome to")
+                            .fontWeight(.black)
+                            .font(.system(size: 36))
+                    }
 
                     Text("Mythical Lands")
                         .fontWeight(.black)
@@ -68,25 +79,34 @@ struct IntroductionView: View {
                     VStack(alignment: .leading) {
                         Text("First, who are you?")
                         TextField("Name of your character", text: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant("")/*@END_MENU_TOKEN@*/)
-                        Picker(selection: /*@START_MENU_TOKEN@*/.constant(1)/*@END_MENU_TOKEN@*/, label: Text("Gender")) {
+                        Picker(selection: $selectedGender, label: Text("Gender")) {
                             Text("man").tag(1)
                             Text("woman").tag(2)
                             Text("other").tag(3)
                         }
                     }
-                    
                     VStack(alignment: .leading) {
                         Text("And you are a...")
-                        Picker(selection: /*@START_MENU_TOKEN@*/.constant(1)/*@END_MENU_TOKEN@*/, label: Text("Character Type")) {
+                        Picker(selection: $selectedRace, label: Text("Race Type")) {
+                            Text("Human").tag(1)
+                            Text("Orc").tag(2)
+                            Text("Elf").tag(3)
+                        }
+                    }
+                    
+                    VStack(alignment: .leading) {
+                        Text("as a...")
+                        Picker(selection: $selectedClass, label: Text("Character Type")) {
                             Text("Barbarian").tag(1)
                             Text("Rogue").tag(2)
                             Text("Wizard").tag(3)
                         }
                     }
                     
-                    VStack {
+                    VStack(alignment: .leading) {
                         Text("Now, roll the dice for your ability points.")
-                        HStack(){
+                        Spacer(minLength: 15)
+                        HStack {
                             Text("Hit Points")
                             Text("5")
                             Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
@@ -98,6 +118,7 @@ struct IntroductionView: View {
                 .padding(.horizontal)
 
                 Button(action: {
+                    // SAVE to savefile
                     withAnimation {
                         viewRouter.currentPage = .content
                     }
