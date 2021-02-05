@@ -11,6 +11,7 @@ enum Page {
     case introduction
     case content
     case title
+    case about
 }
 
 struct MainView: View {
@@ -25,6 +26,8 @@ struct MainView: View {
                 IntroductionView(viewRouter: viewRouter)
             case .title:
                 TitleScreenView(viewRouter: viewRouter)
+            case .about:
+                AboutView(viewRouter: viewRouter)
         }
     }
 }

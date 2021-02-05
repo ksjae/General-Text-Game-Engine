@@ -28,6 +28,15 @@ struct Stat {
     var INT: Int
     var WIS: Int
     var CHA: Int
+    
+    mutating func add(stat: Stat) {
+        self.CHA += stat.CHA
+        self.CON += stat.CON
+        self.DEX += stat.DEX
+        self.INT += stat.INT
+        self.WIS += stat.WIS
+        self.STR += stat.STR
+    }
 }
 
 enum DiceType {
@@ -40,20 +49,27 @@ enum DiceType {
     case one
 }
 
-class Item {
+
+
+class Item: Equatable {
     var name: String!
     var desc: String = ""
     var modifier: Stat = Stat(STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0)
     var id: UUID!
     var trueCost: Int = 0
     var consumable: Bool!
-    init(name: String, description: String, modifier: Stat, cost: Int, consumable: Bool = false) {
+    var hpMod: Int
+    init(name: String, description: String, modifier: Stat, cost: Int, hp: Int = 0, consumable: Bool = false) {
         self.name = name
         self.desc = description
         self.modifier = modifier
         self.trueCost = cost
         self.id = UUID()
+        self.hpMod = hp
         self.consumable = consumable
+    }
+    static func ==(lhs: Item, rhs: Item) -> Bool {
+        return lhs.id == rhs.id
     }
 }
 
@@ -72,6 +88,13 @@ enum WeaponProperty {
     case versatile
 }
 
+enum DamageType {
+    case cleaving
+    case slashing
+    case thrusting
+    case tearing
+}
+
 class Weapon: Item {
     var damageType: DiceType!
     var properties: [WeaponProperty]!
@@ -87,7 +110,18 @@ class Weapon: Item {
 }
 
 // Spells
-
+class Spell: Weapon {
+    var isRitual: Bool!, isCantrip: Bool!
+    var castingTime: Int = 0
+    var area: Int = 1 // # of enemy affected
+    init(name: String, description: String, modifier: Stat, cost: Int, damage: DiceType, properties: [WeaponProperty], normalRange: Int = 5, longRange: Int = 5, area: Int = 1, castingTime: Int = 0, isRitual: Bool = false, isCantrip: Bool = false) {
+        super.init(name: name, description: description, modifier: modifier, cost: cost, damage: damage, properties: properties, normalRange: normalRange, longRange: longRange)
+        self.area = area
+        self.castingTime = castingTime
+        self.isRitual = isRitual
+        self.isCantrip = isCantrip
+    }
+}
 
 // Moving stuff
 
@@ -95,10 +129,28 @@ class Creature: Item {
     var stat: Stat = Stat(STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0)
     var armor: Int!
     var hp: Int!
-    var weapon: Weapon!
+    var weapons: [Weapon] = []
+    var spells: [Spell] = []
     var challenge: Int!
+    init(name: String, description: String, modifier: Stat, cost: Int, hp: Int) {
+        super.init(name: name, description: description, modifier: modifier, cost: cost)
+        self.hp = hp
+    }
+    func AddWeapon(weapon: Weapon) {
+        self.weapons.append(weapon)
+    }
+    func AddSpell(spell: Spell) {
+        self.spells.append(spell)
+    }
 }
 
-class Actor: Item {
+class Actor: Creature {
+    var inventory: [Item] = []
+    func addInventory(item: Item) {
+        self.inventory.append(item)
+    }
+}
+
+class Player: Actor {
     
 }

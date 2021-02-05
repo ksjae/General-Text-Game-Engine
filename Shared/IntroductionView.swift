@@ -32,12 +32,21 @@ struct TitleScreenView: View {
         }, label: {
             Text("New Game")
         })
+        if let _ = UserDefaults.standard.string(forKey: "Savefile") {
+            Button(action: {
+                withAnimation {
+                    viewRouter.currentPage = .content
+                }
+            }, label: {
+                Text("Continue")
+            })
+        }
         Button(action: {
             withAnimation {
-                viewRouter.currentPage = .content
+                viewRouter.currentPage = .about
             }
         }, label: {
-            Text("Continue")
+            Text("About")
         })
     }
 }
@@ -130,6 +139,13 @@ struct IntroductionView: View {
                 .padding(.horizontal, 20)
             }
         }
+    }
+}
+
+struct AboutView: View {
+    @StateObject var viewRouter: ViewRouter
+    var body: some View {
+        Text("IN DEVELOPMENT.")
     }
 }
 
