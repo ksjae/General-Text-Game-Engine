@@ -21,7 +21,7 @@ struct Text_GameApp: App {
 
 // Custom struct definition
 
-struct Stat {
+struct Stat: Codable {
     var STR: Int
     var DEX: Int
     var CON: Int
@@ -39,7 +39,7 @@ struct Stat {
     }
 }
 
-enum DiceType {
+enum DiceType: String, Codable {
     case d4
     case d6
     case d8
@@ -49,9 +49,7 @@ enum DiceType {
     case one
 }
 
-
-
-class Item: Equatable {
+class Item: Equatable, Codable {
     var name: String!
     var desc: String = ""
     var modifier: Stat = Stat(STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0)
@@ -75,7 +73,7 @@ class Item: Equatable {
 
 
 // Weapons
-enum WeaponProperty {
+enum WeaponProperty: String, Codable {
     case ammunition
     case finesse
     case heavy
@@ -88,7 +86,7 @@ enum WeaponProperty {
     case versatile
 }
 
-enum DamageType {
+enum DamageType: String, Codable {
     case cleaving
     case slashing
     case thrusting
@@ -107,6 +105,18 @@ class Weapon: Item {
             self.longRange = longRange
         }
     }
+    
+    enum WeaponKeys: CodingKey {
+            case damagetype, properties, normalrange, longrange
+    }
+    required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+        let container = try decoder.container(keyedBy: WeaponKeys.self)
+        self.damageType = try container.decode(DiceType.self, forKey: .damagetype)
+        self.longRange = try container.decode(Int.self, forKey: .longrange)
+        self.normalRange = try container.decode(Int.self, forKey: .normalrange)
+        self.properties = try container.decode([WeaponProperty].self, forKey: .properties)
+    }
 }
 
 // Spells
@@ -120,6 +130,18 @@ class Spell: Weapon {
         self.castingTime = castingTime
         self.isRitual = isRitual
         self.isCantrip = isCantrip
+    }
+    
+    enum SpellKeys: CodingKey {
+        case isritual, iscantrip, castingtime, area
+    }
+    required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+        let container = try decoder.container(keyedBy: SpellKeys.self)
+        self.area = try container.decode(Int.self, forKey: .area)
+        self.castingTime = try container.decode(Int.self, forKey: .castingtime)
+        self.isCantrip = try container.decode(Bool.self, forKey: .iscantrip)
+        self.isRitual = try container.decode(Bool.self, forKey: .isritual)
     }
 }
 
@@ -136,6 +158,20 @@ class Creature: Item {
         super.init(name: name, description: description, modifier: modifier, cost: cost)
         self.hp = hp
     }
+    
+    enum CreatureKeys: CodingKey {
+        case stat, armor, hp, weapons, spells, challenge
+    }
+    required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+        let container = try decoder.container(keyedBy: CreatureKeys.self)
+        self.stat = try container.decode(Stat.self, forKey: .stat)
+        self.armor = try container.decode(Int.self, forKey: .armor)
+        self.hp = try container.decode(Int.self, forKey: .hp)
+        self.weapons = try container.decode([Weapon].self, forKey: .weapons)
+        self.spells = try container.decode([Spell].self, forKey: .spells)
+        self.challenge = try container.decode(Int.self, forKey: .challenge)
+    }
     func AddWeapon(weapon: Weapon) {
         self.weapons.append(weapon)
     }
@@ -151,6 +187,17 @@ class Actor: Creature {
     }
 }
 
+struct SpellSlot: Codable {
+    var level: Int
+    var spell: Spell
+}
+
 class Player: Actor {
     
+}
+
+struct Save: Codable {
+    var player: Player
+    var currentFile: String
+    var currentLine: String
 }

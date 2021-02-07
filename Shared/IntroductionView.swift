@@ -128,6 +128,7 @@ struct IntroductionView: View {
 
                 Button(action: {
                     // SAVE to savefile
+                    UserDefaults.standard.set("", forKey: "Savefile")
                     withAnimation {
                         viewRouter.currentPage = .content
                     }
@@ -146,6 +147,14 @@ struct AboutView: View {
     @StateObject var viewRouter: ViewRouter
     var body: some View {
         Text("IN DEVELOPMENT.")
+        Button(action: {
+            let domain = Bundle.main.bundleIdentifier!
+            UserDefaults.standard.removePersistentDomain(forName: domain)
+            UserDefaults.standard.synchronize()
+            print(Array(UserDefaults.standard.dictionaryRepresentation().keys).count)
+        }, label: {
+            Text("Clear Settings")
+        })
     }
 }
 

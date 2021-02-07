@@ -142,10 +142,20 @@ class Parser {
             }
             
         case ">":
-            let _ = "Align or Blockquote"
+            switch line.prefix(2) {
+            case ">>":
+                dict["alignRight"] = true
+            case "><":
+                dict["alignCenter"] = true
+            default:
+                dict["blockquote"] = true
+            }
         
         case "-":
-            let _ = "Lists OR Horizontal line"
+            if line.prefix(2) == "--" {
+                dict["notText"] = true
+                dict["line"] = true
+            }
             
         default:
             text = line
