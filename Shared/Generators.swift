@@ -69,3 +69,46 @@ class Fight {
 class Trade {
     
 }
+
+class Choice {
+    
+}
+
+class GM {
+    var flags: [String] = []
+    func commandHandler(rawLine: String) {
+        var fontSize = 2
+        let regex = try? NSRegularExpression(pattern: #"!(.*?) (.*)"#)
+        if let match = regex?.firstMatch(in: rawLine, options: [], range: NSRange(location: 0, length: rawLine.utf16.count)) {
+            switch rawLine {
+                case "SET":
+                    fontSize = 33
+                case "UNSET":
+                    fontSize = 24
+                case "END":
+                    fontSize = 18
+                case "PLAYER":
+                    fontSize = 23
+                case "ACTOR":
+                    fontSize = -1
+                case "FIGHT":
+                    fontSize = 123
+                case "WON":
+                    fontSize = 123
+                case "LOST":
+                    fontSize = 123
+                case "CHOICE":
+                    fontSize = 123
+                case "IF":
+                    fontSize = 123
+                default:
+                    let flag = String(rawLine[Range(match.range(at: 1), in: rawLine)!])
+                    if self.flags.contains(flag) {
+                        // The following contents are visible when FLAG is set
+                    } else {
+                        self.flags.append(flag)
+                    }
+            }
+        }
+    }
+}

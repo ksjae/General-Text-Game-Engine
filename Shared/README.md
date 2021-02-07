@@ -14,8 +14,7 @@ General Text Game Engine supports limited subsets of Markdown (all usages are de
 
 ![Image Caption](image.png)
 
->> align right
-<< align left (is default)
+>> align right (align left by default)
 >< align center
 
 - Lists
@@ -52,7 +51,7 @@ The following line defines an item. ** all items need to be defined in order to 
 !PLAYER ADD SPELL spell_name
 !PLAYER REMOVE ITEM item_name
 ```
-*not suppling name will result in something random added/removed instead.
+*not supplying name will result in something random added/removed instead.
 
 You can also spawn someone like a player but not interactable (say, a companion).
 ```

@@ -45,7 +45,7 @@ struct ContentView: View {
 struct ParagraphView: View {
     let textContent: String?
     let picturePath: String?
-    let fontSize = 14
+    let fontSize: Int = 14
     var body: some View {
         if let content = self.textContent {
             Text(content)
