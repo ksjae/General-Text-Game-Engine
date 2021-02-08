@@ -59,14 +59,12 @@ struct IntroductionView: View {
     @StateObject var viewRouter: ViewRouter
     
     @State private var selectedGender = 1
-    @State private var selectedRace = 1
-    @State private var selectedClass = 1
+    @State private var selectedRace = Races.Human
+    @State private var selectedClass = Classes.Barbarian
+    @State private var stat = Stat(STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0)
     
     var body: some View {
-        
-        ScrollView {
             VStack(alignment: .center) {
-
                 VStack {
                     if let _ = UserDefaults.standard.string(forKey: "hasPlayed") {
                         Text("Welcome back to")
@@ -83,52 +81,104 @@ struct IntroductionView: View {
                         .font(.system(size: 36))
                         .foregroundColor(Color.accentColor)
                 }
-                Spacer(minLength: 30)
                 VStack(alignment: .leading, spacing: 30) {
-                    VStack(alignment: .leading) {
-                        Text("First, who are you?")
-                        TextField("Name of your character", text: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant("")/*@END_MENU_TOKEN@*/)
-                        Picker(selection: $selectedGender, label: Text("Gender")) {
-                            Text("man").tag(1)
-                            Text("woman").tag(2)
-                            Text("other").tag(3)
-                        }
-                    }
-                    VStack(alignment: .leading) {
-                        Text("And you are a...")
-                        Picker(selection: $selectedRace, label: Text("Race Type")) {
-                            Text("Human").tag(1)
-                            Text("Orc").tag(2)
-                            Text("Elf").tag(3)
-                        }
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("as a...")
-                        Picker(selection: $selectedClass, label: Text("Character Type")) {
-                            Text("Barbarian").tag(1)
-                            Text("Rogue").tag(2)
-                            Text("Wizard").tag(3)
-                        }
+                    TextField("Name of your character", text: /*@START_MENU_TOKEN@*//*@PLACEHOLDER=Value@*/.constant("")/*@END_MENU_TOKEN@*/)
+                    Text("I want to be a...")
+                    GeometryReader { geometry in
+                        HStack(alignment: .center) {
+                            Picker(selection: $selectedGender, label: Text("Gender")) {
+                                Text("Male").tag(1)
+                                Text("Female").tag(2)
+                                Text("Generic").tag(3)
+                            }.frame(width: geometry.size.width/3 - 20, height: 150).clipped()
+                            Picker(selection: $selectedRace, label: Text("Race Type")) {
+                                ForEach(Races.allCases, id: \.self) {
+                                        Text($0.rawValue)
+                                }
+                            }.frame(width: geometry.size.width/3, height: 150).clipped()
+                            Picker(selection: $selectedClass, label: Text("Character Type")) {
+                                ForEach(Classes.allCases, id: \.self) {
+                                    Text($0.rawValue)
+                                }
+                            }.frame(width: geometry.size.width/3, height: 150).clipped()
+                        }.frame(width: geometry.size.width, height: 90, alignment: .bottom).clipped()
                     }
                     
                     VStack(alignment: .leading) {
                         Text("Now, roll the dice for your ability points.")
-                        Spacer(minLength: 15)
+                        
                         HStack {
-                            Text("Hit Points")
-                            Text("5")
-                            Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/, label: {
-                                Text("Roll dice")
-                            })
+                            Text("Strength")
+                            Text(String(self.stat.STR))
+                            let mod = returnRaceModifier(race: selectedRace).STR
+                            if mod > 0 {
+                                Text("+\(mod)")
+                            } else if mod < 0 {
+                                Text("-\(mod)")
+                            }
+                        }
+                        HStack {
+                            Text("Dexterity")
+                            Text(String(self.stat.DEX))
+                            let mod = returnRaceModifier(race: selectedRace).DEX
+                            if mod > 0 {
+                                Text("+\(mod)")
+                            } else if mod < 0 {
+                                Text("-\(mod)")
+                            }
+                        }
+                        HStack {
+                            Text("Constitution")
+                            Text(String(self.stat.CON))
+                            let mod = returnRaceModifier(race: selectedRace).CON
+                            if mod > 0 {
+                                Text("+\(mod)")
+                            } else if mod < 0 {
+                                Text("-\(mod)")
+                            }
+                        }
+                        HStack {
+                            Text("Intelligence")
+                            Text(String(self.stat.INT))
+                            let mod = returnRaceModifier(race: selectedRace).INT
+                            if mod > 0 {
+                                Text("+\(mod)")
+                            } else if mod < 0 {
+                                Text("-\(mod)")
+                            }
+                        }
+                        HStack {
+                            Text("Wisdom")
+                            Text(String(self.stat.WIS))
+                            let mod = returnRaceModifier(race: selectedRace).WIS
+                            if mod > 0 {
+                                Text("+\(mod)")
+                            } else if mod < 0 {
+                                Text("-\(mod)")
+                            }
+                        }
+                        HStack {
+                            Text("Charisma")
+                            Text(String(self.stat.CHA))
+                            let mod = returnRaceModifier(race: selectedRace).CHA
+                            if mod > 0 {
+                                Text("+\(mod)")
+                            } else if mod < 0 {
+                                Text("-\(mod)")
+                            }
                         }
                     }
+                    Button(action: {
+                        self.stat = generateStat()
+                    }, label: {
+                        Text("Roll dice")
+                    })
                 }
                 .padding(.horizontal)
 
                 Button(action: {
-                    // SAVE to savefile
-                    UserDefaults.standard.set("", forKey: "Savefile")
+                    // SAVE to savefile - THIS BREAKS PREVIEW
+                    // UserDefaults.standard.set("{}", forKey: "Savefile")
                     withAnimation {
                         viewRouter.currentPage = .content
                     }
@@ -138,7 +188,6 @@ struct IntroductionView: View {
                 .padding()
                 .cornerRadius(40)
                 .padding(.horizontal, 20)
-            }
         }
     }
 }

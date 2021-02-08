@@ -15,6 +15,25 @@ func useItem(actor: Player, item: Item) -> Player {
     return actor
 }
 
+func generateStat() -> Stat {
+    var diceRolls: [Int]
+    var s = [0,0,0,0,0,0]
+    for i in 0..<6 {
+        diceRolls = [Int.random(in: 1...6),Int.random(in: 1...6),Int.random(in: 1...6),Int.random(in: 1...6)]
+        let result = diceRolls.reduce(0, +) - diceRolls.min()!
+        s[i] = result
+    }
+    return Stat(STR: s[0], DEX: s[1], CON: s[2], INT: s[3], WIS: s[4], CHA: s[5])
+}
+
+func returnRaceModifier(race: Races) -> Stat {
+    return Stat(STR: 0, DEX: 0, CON: 1, INT: 0, WIS: 0, CHA: 0)
+}
+
+func nextLevelXPRequirement(level: Int) -> Int {
+    return 8000
+}
+
 class Fight {
     // Each Fight() is for a fight scene.
     var player: Player

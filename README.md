@@ -1,5 +1,13 @@
 #  General Text Game Engine
 
+## This is a pre-coded app.
+Ever tried to make a game, but realized you needed to learn too much? Well, this does the heavy lifting for you.
+The important things such as UI/UX and game logic is **done**. You just need to..
+
+1. Write the story
+2. Test
+3. Purchase the ridiculous $99/yr Apple™ developer plan and publish it
+
 ##  How to write the story (EN)
 ### Markdown, basically
 General Text Game Engine supports limited subsets of Markdown (all usages are depicted in this article). The contents here will be shown on the game itself.

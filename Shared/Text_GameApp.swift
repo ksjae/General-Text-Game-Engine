@@ -151,12 +151,16 @@ class Creature: Item {
     var stat: Stat = Stat(STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0)
     var armor: Int!
     var hp: Int!
+    var hpMax: Int!
     var weapons: [Weapon] = []
     var spells: [Spell] = []
     var challenge: Int!
-    init(name: String, description: String, modifier: Stat, cost: Int, hp: Int) {
-        super.init(name: name, description: description, modifier: modifier, cost: cost)
+    init(name: String, description: String, modifier: Stat, hp: Int) {
+        super.init(name: name, description: description, modifier: modifier, cost: 0)
         self.hp = hp
+        self.hpMax = hp
+        self.armor = 0
+        self.challenge = 5
     }
     
     enum CreatureKeys: CodingKey {
@@ -180,10 +184,29 @@ class Creature: Item {
     }
 }
 
+enum Classes: String, Codable, Equatable, CaseIterable {
+    case Barbarian, Wizard, Rogue
+}
+
+enum Races: String, Codable, Equatable, CaseIterable {
+    case Human, Elf, Dwarf
+}
+
 class Actor: Creature {
     var inventory: [Item] = []
     func addInventory(item: Item) {
         self.inventory.append(item)
+    }
+    override init(name: String, description: String, modifier: Stat, hp: Int) {
+        super.init(name: name, description: description, modifier: modifier, hp: hp)
+    }
+    enum ActorKeys: CodingKey {
+        case money, level, xp
+    }
+    required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+        let container = try decoder.container(keyedBy: ActorKeys.self)
+        self.inventory = try container.decode([Item].self, forKey: .money)
     }
 }
 
@@ -193,7 +216,22 @@ struct SpellSlot: Codable {
 }
 
 class Player: Actor {
-    
+    var money: Int = 16
+    var level: Int = 3
+    var xp: Int = 6554
+    override init(name: String, description: String, modifier: Stat, hp: Int) {
+        super.init(name: name, description: description, modifier: modifier, hp: hp)
+    }
+    enum PlayerKeys: CodingKey {
+        case money, level, xp
+    }
+    required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+        let container = try decoder.container(keyedBy: PlayerKeys.self)
+        self.money = try container.decode(Int.self, forKey: .money)
+        self.level = try container.decode(Int.self, forKey: .level)
+        self.xp = try container.decode(Int.self, forKey: .xp)
+    }
 }
 
 struct Save: Codable {
