@@ -166,3 +166,7 @@ class Parser {
         return dict
     }
 }
+
+func parsePlayer(player: Player, line: String) -> Player {
+    return player
+}

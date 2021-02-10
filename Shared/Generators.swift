@@ -95,39 +95,64 @@ class Choice {
 
 class GM {
     var flags: [String] = []
-    func commandHandler(rawLine: String) {
+    var currentlyHandlingConditionals = false
+    var wonLastFight = false
+    var player: Player
+    
+    init(player: Player) {
+        self.player = player
+    }
+    
+    func commandHandler(command: String, rawLine: String) {
         var fontSize = 2
         let regex = try? NSRegularExpression(pattern: #"!(.*?) (.*)"#)
         if let match = regex?.firstMatch(in: rawLine, options: [], range: NSRange(location: 0, length: rawLine.utf16.count)) {
-            switch rawLine {
+            switch command {
                 case "SET":
-                    fontSize = 33
+                    flags.append(String(rawLine[Range(match.range(at: 1), in: rawLine)!]))
                 case "UNSET":
-                    fontSize = 24
+                    flags.remove(at: flags.firstIndex(of: String(rawLine[Range(match.range(at: 1), in: rawLine)!]))!)
                 case "END":
-                    fontSize = 18
+                    currentlyHandlingConditionals = false
                 case "PLAYER":
-                    fontSize = 23
+                    player = parsePlayer(player: player, line: rawLine)
                 case "ACTOR":
-                    fontSize = -1
+                    let name = "John"
+                    let stat = Stat(STR: 8, DEX: 8, CON: 8, INT: 8, WIS: 8, CHA: 8)
+                    let hp = 12 + stat.CON
+                    let actorClass = Classes.Wizard
+                    let actorRace = Races.Elf
+                    let actor = Actor(name: name, description: name, stat: stat, hp: hp, charClass: actorClass, race: actorRace)
+                    player.followers.append(actor)
                 case "FIGHT":
+                    // Notify UI to launch fight screen
                     fontSize = 123
                 case "WON":
-                    fontSize = 123
+                    if wonLastFight {
+                        // Visible if flag set
+                    }
                 case "LOST":
-                    fontSize = 123
+                    if !wonLastFight {
+                        // Visible if flag set
+                    }
                 case "CHOICE":
+                    // Notify UI to launch fight screen
                     fontSize = 123
                 case "IF":
                     fontSize = 123
                 default:
                     let flag = String(rawLine[Range(match.range(at: 1), in: rawLine)!])
-                    if self.flags.contains(flag) {
+                    if flags.contains(flag) {
                         // The following contents are visible when FLAG is set
-                    } else {
-                        self.flags.append(flag)
                     }
             }
         }
+    }
+    
+    func save(currentFile: String, currentLineNo: Int) {
+        // CREATE SAVE FILE
+        let savefile = Save(player: player, currentFile: currentFile, currentLineNo: currentLineNo)
+        // SAVE TO whatever
+        
     }
 }

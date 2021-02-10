@@ -37,6 +37,10 @@ struct Stat: Codable {
         self.WIS += stat.WIS
         self.STR += stat.STR
     }
+    
+    func list() -> [Int] {
+        return [self.STR, self.DEX, self.CON, self.INT, self.WIS, self.CHA]
+    }
 }
 
 enum DiceType: String, Codable {
@@ -49,7 +53,7 @@ enum DiceType: String, Codable {
     case one
 }
 
-class Item: Equatable, Codable {
+class Item: Equatable, Codable, Identifiable {
     var name: String!
     var desc: String = ""
     var modifier: Stat = Stat(STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0)
@@ -194,19 +198,27 @@ enum Races: String, Codable, Equatable, CaseIterable {
 
 class Actor: Creature {
     var inventory: [Item] = []
+    var characterClass: Classes!
+    var race: Races!
+    
     func addInventory(item: Item) {
         self.inventory.append(item)
     }
-    override init(name: String, description: String, modifier: Stat, hp: Int) {
-        super.init(name: name, description: description, modifier: modifier, hp: hp)
+    init(name: String, description: String, stat: Stat, hp: Int, charClass: Classes, race: Races) {
+        super.init(name: name, description: description, modifier: Stat(STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0), hp: hp)
+        self.characterClass = charClass
+        self.race = race
+        self.stat = stat
     }
     enum ActorKeys: CodingKey {
-        case money, level, xp
+        case inventory, charclass, race, stat
     }
     required init(from decoder: Decoder) throws {
         try super.init(from: decoder)
         let container = try decoder.container(keyedBy: ActorKeys.self)
-        self.inventory = try container.decode([Item].self, forKey: .money)
+        self.inventory = try container.decode([Item].self, forKey: .inventory)
+        self.characterClass = try container.decode(Classes.self, forKey: .charclass)
+        self.race = try container.decode(Races.self, forKey: .race)
     }
 }
 
@@ -219,8 +231,10 @@ class Player: Actor {
     var money: Int = 16
     var level: Int = 3
     var xp: Int = 6554
-    override init(name: String, description: String, modifier: Stat, hp: Int) {
-        super.init(name: name, description: description, modifier: modifier, hp: hp)
+    var followers: [Actor] = []
+    override init(name: String, description: String, stat: Stat, hp: Int, charClass: Classes, race: Races) {
+        super.init(name: name, description: description, stat: stat, hp: hp, charClass: charClass, race: race)
+        self.inventory.append(Item(name: "Knife", description: "A simple and basic knife you picked up at a thrift shop", modifier: Stat(STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0), cost: 10))
     }
     enum PlayerKeys: CodingKey {
         case money, level, xp
@@ -237,5 +251,5 @@ class Player: Actor {
 struct Save: Codable {
     var player: Player
     var currentFile: String
-    var currentLine: String
+    var currentLineNo: Int
 }
