@@ -27,6 +27,14 @@
 		1B1FA45225C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */; };
 		1B1FA45325C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */; };
 		1B1FA45425C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1B1FA44C25C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf */; };
+		1B38E66025D51D2A0034D317 /* Introduction.md in Resources */ = {isa = PBXBuildFile; fileRef = 1B3A839025C96CF600C09BB1 /* Introduction.md */; };
+		1B38E66525D51D2B0034D317 /* Introduction.md in Resources */ = {isa = PBXBuildFile; fileRef = 1B3A839025C96CF600C09BB1 /* Introduction.md */; };
+		1B38E66625D51D2B0034D317 /* Introduction.md in Resources */ = {isa = PBXBuildFile; fileRef = 1B3A839025C96CF600C09BB1 /* Introduction.md */; };
+		1B38E66B25D51D2C0034D317 /* Introduction.md in Resources */ = {isa = PBXBuildFile; fileRef = 1B3A839025C96CF600C09BB1 /* Introduction.md */; };
+		1B38E67025D51D340034D317 /* Town.md in Resources */ = {isa = PBXBuildFile; fileRef = 1B14B90125CAB29F00FE313F /* Town.md */; };
+		1B38E67525D51D350034D317 /* Town.md in Resources */ = {isa = PBXBuildFile; fileRef = 1B14B90125CAB29F00FE313F /* Town.md */; };
+		1B38E67A25D51D350034D317 /* Town.md in Resources */ = {isa = PBXBuildFile; fileRef = 1B14B90125CAB29F00FE313F /* Town.md */; };
+		1B38E67F25D51D360034D317 /* Town.md in Resources */ = {isa = PBXBuildFile; fileRef = 1B14B90125CAB29F00FE313F /* Town.md */; };
 		1B3A837125C9616000C09BB1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A837025C9616000C09BB1 /* MainView.swift */; };
 		1B3A837225C9616000C09BB1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A837025C9616000C09BB1 /* MainView.swift */; };
 		1B3A837325C9616000C09BB1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B3A837025C9616000C09BB1 /* MainView.swift */; };
@@ -335,6 +343,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B38E66025D51D2A0034D317 /* Introduction.md in Resources */,
+				1B38E67025D51D340034D317 /* Town.md in Resources */,
 				1B1FA44D25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf in Resources */,
 				1B1FA45125C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */,
 				1B1FA43625C7A1C1004D6078 /* Assets.xcassets in Resources */,
@@ -345,6 +355,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B38E66525D51D2B0034D317 /* Introduction.md in Resources */,
+				1B38E67A25D51D350034D317 /* Town.md in Resources */,
 				1B1FA44E25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf in Resources */,
 				1B1FA45225C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */,
 				1B1FA43725C7A1C1004D6078 /* Assets.xcassets in Resources */,
@@ -355,7 +367,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B38E66625D51D2B0034D317 /* Introduction.md in Resources */,
 				1B1FA45325C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */,
+				1B38E67525D51D350034D317 /* Town.md in Resources */,
 				1B1FA44F25C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -364,7 +378,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1B38E66B25D51D2C0034D317 /* Introduction.md in Resources */,
 				1B1FA45425C7ED09004D6078 /* KoPubWorld Batang_Pro Light.otf in Resources */,
+				1B38E67F25D51D360034D317 /* Town.md in Resources */,
 				1B1FA45025C7ED09004D6078 /* KoPubWorld Batang_Pro Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

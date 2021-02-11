@@ -18,13 +18,13 @@ class StreamReader  {
     var buffer : Data
     var atEof : Bool
     
-    init?(path: String, delimiter: String = "\n", encoding: String.Encoding = .utf8,
+    init?(path: URL, delimiter: String = "\n", encoding: String.Encoding = .utf8,
           chunkSize: Int = 4096) {
         
-        guard let fileHandle = FileHandle(forReadingAtPath: path),
-            let delimData = delimiter.data(using: encoding) else {
-                return nil
+        guard let fileHandle = try? FileHandle(forReadingFrom: path), let delimData = delimiter.data(using: encoding) else {
+            return nil
         }
+        
         self.encoding = encoding
         self.chunkSize = chunkSize
         self.fileHandle = fileHandle
@@ -91,30 +91,64 @@ extension StreamReader : Sequence {
 // Source: stackoverflow.com/a/24648951
 
 // markup language parser
+struct Content: Hashable {
+    
+    static func == (lhs: Content, rhs: Content) -> Bool {
+        return lhs.text == rhs.text && lhs.imageName == rhs.imageName && lhs.font == rhs.font && lhs.lineNo == rhs.lineNo
+    }
+    
+    var text: String?
+    var font: Font?
+    var alignment: Alignment = Alignment.leading
+    var imageName: String?
+    var fightScene: Fight?
+    var choiceScene: Choice?
+    var isBlockquote: Bool?
+    var isLine: Bool?
+    var runGMWith: String?
+    var lineNo: Int!
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(text)
+        hasher.combine(lineNo)
+    }
+}
+
 class Parser {
     var rawFile: String!
     var aStreamReader: StreamReader!
     var defaultFontSize = 14
     let fontType = "KoPubWorldBatangPL"
     
+    init(filename: String){
+        self.loadFile(filename: filename)
+    }
+    
     func loadFile(filename: String) {
-        self.aStreamReader = StreamReader(path: filename)
+        guard let actualPath = Bundle.main.url(forResource: filename, withExtension: "md") else {
+            print("FILE \(filename) NOT FOUND!!")
+            return
+        }
+        self.aStreamReader = StreamReader(path: actualPath)
         if self.aStreamReader == nil {
-            print("loadFile failed: File \(filename) not found")
+            print("loadFile failed for \(filename)")
         }
     }
     
-    func parseLine() -> Dictionary<String, Any> {
+    func parseLine(lineNo: Int) -> Content? {
+        
         guard let line = aStreamReader.nextLine() else {
-            return ["text": "", "font": Font.custom("KoPubWorldBatangPL", size: CGFloat(self.defaultFontSize))]
+            return nil
         }
-        let command = line.prefix(1)
-        var dict: Dictionary<String, Any> = [:]
+        
+        let prefix = line.prefix(1)
+        var content = Content()
+        content.lineNo = lineNo
         
         var fontSize: Int = self.defaultFontSize
         var text = ""
         
-        switch command {
+        switch prefix {
         case "#":
             let regex = try? NSRegularExpression(pattern: #"(#+)( *)(.*)"#)
             
@@ -137,33 +171,46 @@ class Parser {
         case "!":
             let regex = try? NSRegularExpression(pattern: #"!(.*?) (.*)"#)
             if let match = regex?.firstMatch(in: line, options: [], range: NSRange(location: 0, length: line.utf16.count)) {
-                dict["command"] = String(line[Range(match.range(at: 1), in: line)!])
+                content.runGMWith = String(line[Range(match.range(at: 1), in: line)!])
                 text = String(line[line.index(line.startIndex, offsetBy: 1)...])
             }
             
         case ">":
             switch line.prefix(2) {
             case ">>":
-                dict["alignRight"] = true
+                content.alignment = Alignment.trailing
             case "><":
-                dict["alignCenter"] = true
+                content.alignment = Alignment.center
             default:
-                dict["blockquote"] = true
+                content.isBlockquote = true
             }
         
         case "-":
             if line.prefix(2) == "--" {
-                dict["notText"] = true
-                dict["line"] = true
+                content.isLine = true
             }
             
         default:
             text = line
         }
-        dict["text"] = text
-        dict["font"] = Font.custom(fontType, size: CGFloat(fontSize))
+        content.text = text
+        content.font = Font.custom(fontType, size: CGFloat(fontSize))
         
-        return dict
+        return content
+    }
+    
+    func parseAll() -> [Content] {
+        var contents: [Content] = []
+        var lineNo = 0
+        var line = self.parseLine(lineNo: lineNo)
+        var defaultContent = Content()
+        defaultContent.text = ""
+        repeat {
+            contents.append(line ?? defaultContent)
+            lineNo += 1
+            line = self.parseLine(lineNo: lineNo)
+        } while line != nil
+        return contents
     }
 }
 
