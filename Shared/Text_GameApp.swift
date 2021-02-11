@@ -43,6 +43,8 @@ struct Stat: Codable {
     }
 }
 
+let statNames = ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
+
 enum DiceType: String, Codable {
     case d4
     case d6
@@ -61,6 +63,7 @@ class Item: Equatable, Codable, Identifiable {
     var trueCost: Int = 0
     var consumable: Bool!
     var hpMod: Int
+    var scheduledForRemoval = false
     init(name: String, description: String, modifier: Stat, cost: Int, hp: Int = 0, consumable: Bool = false) {
         self.name = name
         self.desc = description
@@ -203,6 +206,12 @@ class Actor: Creature {
     
     func addInventory(item: Item) {
         self.inventory.append(item)
+    }
+    func removeInventory(item: Item){
+        if let itemIndex = inventory.firstIndex(of: item) {
+            inventory[itemIndex].scheduledForRemoval = true
+            inventory.remove(at: itemIndex)
+        }
     }
     init(name: String, description: String, stat: Stat, hp: Int, charClass: Classes, race: Races) {
         super.init(name: name, description: description, modifier: Stat(STR: 0, DEX: 0, CON: 0, INT: 0, WIS: 0, CHA: 0), hp: hp)
