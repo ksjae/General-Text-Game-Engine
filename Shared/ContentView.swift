@@ -57,19 +57,16 @@ struct ContentView: View {
 }
 
 struct ParagraphView: View {
-    @State var textContent: String?
+    @State var textContent: [RichTextPiece]?
     @State var picturePath: String?
-    @State var isBold: Bool?
     @Binding var fontSize: Int
     var body: some View {
         if let text = textContent {
-            Text(text)
-                .font(Font.custom("KoPubWorldBatangPL", size: CGFloat(self.fontSize)))
+            renderInlineText(text)
                 .padding(.bottom)
                 .lineSpacing(CGFloat(self.fontSize)*0.3)
                 .layoutPriority(3)
         }
-        
         if let picture = picturePath {
             Image(picture)
                 .resizable()
@@ -77,6 +74,25 @@ struct ParagraphView: View {
                 .frame(width: 250.0, alignment: .center)
         }
     }
+    
+    func renderInlineText(_ text: [RichTextPiece]) -> some View {
+            return text.map {t in
+                var atomView: Text = Text(t.text)
+                //var font: Font = Font.custom("KoPubWorldBatangPL", size: CGFloat(self.fontSize))
+                if t.type == .bold {
+                    atomView = atomView.bold()
+                    //font = Font.custom("KoPubWorldBatangPM", size: CGFloat(self.fontSize))
+                }
+                if t.type == .italic {
+                    atomView = atomView.italic()
+                }
+                if t.type == .italicBold {
+                    atomView = atomView.italic().bold()
+                }
+                //return atomView.font(font)
+                return atomView
+            }.reduce(Text(""), +)
+        }
 }
 
 //MARK:- HUD

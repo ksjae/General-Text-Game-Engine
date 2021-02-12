@@ -34,6 +34,7 @@ General Text Game Engine supports limited subsets of Markdown (all usages are de
 ```
 
 Remember, these do NOT work mid-sentence, **EXCEPT** *italics* and bold
+Cannot nest italics text in bold text due to parser limitations.
 
 Special commands that can be used in story *.md files
 

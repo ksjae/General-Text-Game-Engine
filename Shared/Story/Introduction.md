@@ -1,7 +1,7 @@
 # $player Journal
 ## Chapter 1. The whispers in town
 
-King John the Third is having a bad time. He was injured, but there was no one that could save him.
+King John the Third is having a bad time. He was injured, but *there was no one* that could **save** him.
 It needed a miracle drug.
 
 > I Hereby declare for those who finds the so-called 'miracle drug' as the Lord of Itchingar.

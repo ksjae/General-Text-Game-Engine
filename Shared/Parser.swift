@@ -91,14 +91,32 @@ extension StreamReader : Sequence {
 // Source: stackoverflow.com/a/24648951
 
 // markup language parser
+enum RichTextType {
+    case normal, light, bold, italic, italicBold
+}
+
+struct RichTextPiece: Identifiable, Hashable {
+    var text: String
+    var type: RichTextType
+    let id = UUID()
+    init (text: String, type: RichTextType = .normal, id: Int = 0) {
+        self.text = text
+        self.type = type
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(text)
+        hasher.combine(type)
+    }
+}
+
 struct Content: Hashable {
     
     static func == (lhs: Content, rhs: Content) -> Bool {
-        return lhs.text == rhs.text && lhs.imageName == rhs.imageName && lhs.font == rhs.font && lhs.lineNo == rhs.lineNo
+        return lhs.text == rhs.text && lhs.imageName == rhs.imageName && lhs.lineNo == rhs.lineNo
     }
     
-    var text: String?
-    var font: Font?
+    var text: [RichTextPiece]?
+    var fontMultiplier: Double = 1
     var alignment: Alignment = Alignment.leading
     var imageName: String?
     var fightScene: Fight?
@@ -114,6 +132,7 @@ struct Content: Hashable {
     }
 }
 
+//MARK: - Parser
 class Parser {
     var rawFile: String!
     var aStreamReader: StreamReader!
@@ -145,7 +164,6 @@ class Parser {
         var content = Content()
         content.lineNo = lineNo
         
-        var fontSize: Int = self.defaultFontSize
         var text = ""
         
         switch prefix {
@@ -155,13 +173,13 @@ class Parser {
             if let match = regex?.firstMatch(in: line, options: [], range: NSRange(location: 0, length: line.utf16.count)) {
                 switch match.range(at: 1).upperBound {
                     case 1:
-                        fontSize = 33
+                        content.fontMultiplier = 3
                     case 2:
-                        fontSize = 24
+                        content.fontMultiplier = 2
                     case 3:
-                        fontSize = 18
+                        content.fontMultiplier = 1.5
                     default:
-                        fontSize = self.defaultFontSize
+                        content.fontMultiplier = 1
                 }
               if let titleRange = Range(match.range(at: 3), in: line) {
                 text = String(line[titleRange])
@@ -193,8 +211,23 @@ class Parser {
         default:
             text = line
         }
-        content.text = text
-        content.font = Font.custom(fontType, size: CGFloat(fontSize))
+        
+        // MARK: Treat italics & bold
+        let regexBold = try! NSRegularExpression(pattern: #"(\*\*)(.*?)\1"#)
+        let regexItalics = try! NSRegularExpression(pattern: #"(\*{1,2})(.*?)\1"#)
+        
+        let italics = returnRichTexts(normalText: text, regex: regexItalics, richtextType: .italic)
+        var richText: [RichTextPiece] = []
+        
+        for element in italics {
+            if element.type == .italic {
+                richText += returnRichTexts(normalText: element.text, regex: regexBold, richtextType: .italicBold)
+            } else {
+                richText += returnRichTexts(normalText: element.text, regex: regexBold, richtextType: .bold)
+            }
+        }
+        
+        content.text = richText
         
         return content
     }
@@ -204,7 +237,7 @@ class Parser {
         var lineNo = 0
         var line = self.parseLine(lineNo: lineNo)
         var defaultContent = Content()
-        defaultContent.text = ""
+        defaultContent.text = [RichTextPiece(text: "")]
         repeat {
             contents.append(line ?? defaultContent)
             lineNo += 1
@@ -212,8 +245,62 @@ class Parser {
         } while line != nil
         return contents
     }
+    
+    func returnRichTexts(normalText text: String, regex: NSRegularExpression, richtextType type: RichTextType) -> [RichTextPiece] {
+        let range = NSRange(text.startIndex..<text.endIndex, in: text)
+        let matches: [NSTextCheckingResult] = regex.matches(in: text, options: [], range: range)
+        let matchingRanges = matches.compactMap { Range<Int>($0.range) }
+        
+        var parts = [0]
+        var richtexts: [RichTextPiece] = []
+
+        for r in matchingRanges {
+            if r.lowerBound != 0 {
+                parts.append(r.lowerBound-1)
+            } else {
+                parts.append(0)
+            }
+            parts.append(r.lowerBound)
+            parts.append(r.upperBound)
+            if r.upperBound != range.upperBound {
+                parts.append(r.upperBound+1)
+            } else {
+                parts.append(range.upperBound)
+            }
+        }
+        parts.append(text.count)
+
+        var isPlainPart = true
+        var i=0
+        repeat {
+            var richText: RichTextPiece
+            var str: String
+            if isPlainPart {
+                str = String(text[parts[i]...parts[i+1]])
+                richText = RichTextPiece(text: str, id: i)
+            } else {
+                str = String(text[parts[i]..<parts[i+1]])
+                richText = RichTextPiece(text: str, type: type, id: i)
+            }
+            richtexts.append(richText)
+            isPlainPart = !isPlainPart
+            i+=2
+        } while i < parts.count
+        
+        return richtexts
+    }
 }
 
 func parsePlayer(player: Player, line: String) -> Player {
     return player
+}
+
+// Extending String to use Int indices
+extension StringProtocol {
+    subscript(_ offset: Int)                     -> Element     { self[index(startIndex, offsetBy: offset)] }
+    subscript(_ range: Range<Int>)               -> SubSequence { prefix(range.lowerBound+range.count).suffix(range.count) }
+    subscript(_ range: ClosedRange<Int>)         -> SubSequence { prefix(range.lowerBound+range.count).suffix(range.count) }
+    subscript(_ range: PartialRangeThrough<Int>) -> SubSequence { prefix(range.upperBound.advanced(by: 1)) }
+    subscript(_ range: PartialRangeUpTo<Int>)    -> SubSequence { prefix(range.upperBound) }
+    subscript(_ range: PartialRangeFrom<Int>)    -> SubSequence { suffix(Swift.max(0, count-range.lowerBound)) }
 }
