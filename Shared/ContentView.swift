@@ -76,23 +76,32 @@ struct ParagraphView: View {
     }
     
     func renderInlineText(_ text: [RichTextPiece]) -> some View {
-            return text.map {t in
-                var atomView: Text = Text(t.text)
-                //var font: Font = Font.custom("KoPubWorldBatangPL", size: CGFloat(self.fontSize))
-                if t.type == .bold {
-                    atomView = atomView.bold()
-                    //font = Font.custom("KoPubWorldBatangPM", size: CGFloat(self.fontSize))
-                }
-                if t.type == .italic {
-                    atomView = atomView.italic()
-                }
-                if t.type == .italicBold {
-                    atomView = atomView.italic().bold()
-                }
-                //return atomView.font(font)
-                return atomView
-            }.reduce(Text(""), +)
+        return text.map {t in
+            var atomView: Text = Text(t.text)
+            //var font: Font = Font.custom("KoPubWorldBatangPL", size: CGFloat(self.fontSize))
+            if t.type == .bold || t.type == .italicBold {
+                atomView = atomView.bold()
+                //font = Font.custom("KoPubWorldBatangPM", size: CGFloat(self.fontSize))
+            }
+            if t.type == .italic || t.type == .italicBold {
+                atomView = atomView.italic()
+            }
+
+            //return atomView.font(font)
+            return atomView
+        }.reduce(Text(""), +)
+    }
+    
+    func renderQuote(_ quote: [RichTextPiece]) -> some View {
+        return VStack {
+            ForEach(quote, id: \.self) {q in
+                renderInlineText([q])
+            }
         }
+        .padding()
+        .border(Color.gray, width: 1)
+        .padding()
+    }
 }
 
 //MARK:- HUD

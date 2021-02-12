@@ -214,16 +214,16 @@ class Parser {
         
         // MARK: Treat italics & bold
         let regexBold = try! NSRegularExpression(pattern: #"(\*\*)(.*?)\1"#)
-        let regexItalics = try! NSRegularExpression(pattern: #"(\*{1,2})(.*?)\1"#)
+        let regexItalics = try! NSRegularExpression(pattern: #"(\*)(.*?)\1"#)
         
-        let italics = returnRichTexts(normalText: text, regex: regexItalics, richtextType: .italic)
+        let bolds = returnRichTexts(normalText: text, regex: regexBold, richtextType: .bold)
         var richText: [RichTextPiece] = []
         
-        for element in italics {
-            if element.type == .italic {
-                richText += returnRichTexts(normalText: element.text, regex: regexBold, richtextType: .italicBold)
+        for element in bolds {
+            if element.type == .bold {
+                richText += returnRichTexts(normalText: element.text, regex: regexItalics, richtextType: .italicBold, defaultTextType: .bold)
             } else {
-                richText += returnRichTexts(normalText: element.text, regex: regexBold, richtextType: .bold)
+                richText += returnRichTexts(normalText: element.text, regex: regexItalics, richtextType: .italic, defaultTextType: element.type)
             }
         }
         
@@ -246,13 +246,23 @@ class Parser {
         return contents
     }
     
-    func returnRichTexts(normalText text: String, regex: NSRegularExpression, richtextType type: RichTextType) -> [RichTextPiece] {
+    func returnRichTexts(normalText text: String, regex: NSRegularExpression, richtextType type: RichTextType, defaultTextType def: RichTextType = .normal) -> [RichTextPiece] {
         let range = NSRange(text.startIndex..<text.endIndex, in: text)
         let matches: [NSTextCheckingResult] = regex.matches(in: text, options: [], range: range)
         let matchingRanges = matches.compactMap { Range<Int>($0.range) }
         
         var parts = [0]
         var richtexts: [RichTextPiece] = []
+        var lengthOfMarker: Int
+        
+        switch type {
+        case .bold:
+            lengthOfMarker = 2
+        case .italic:
+            lengthOfMarker = 1
+        default:
+            lengthOfMarker = 0
+        }
 
         for r in matchingRanges {
             if r.lowerBound != 0 {
@@ -260,8 +270,8 @@ class Parser {
             } else {
                 parts.append(0)
             }
-            parts.append(r.lowerBound)
-            parts.append(r.upperBound)
+            parts.append(r.lowerBound + lengthOfMarker)
+            parts.append(r.upperBound - lengthOfMarker)
             if r.upperBound != range.upperBound {
                 parts.append(r.upperBound+1)
             } else {
@@ -277,7 +287,7 @@ class Parser {
             var str: String
             if isPlainPart {
                 str = String(text[parts[i]...parts[i+1]])
-                richText = RichTextPiece(text: str, id: i)
+                richText = RichTextPiece(text: str, type: def, id: i)
             } else {
                 str = String(text[parts[i]..<parts[i+1]])
                 richText = RichTextPiece(text: str, type: type, id: i)
