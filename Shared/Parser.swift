@@ -156,7 +156,7 @@ class Parser {
     
     func parseLine(lineNo: Int) -> Content? {
         
-        guard let line = aStreamReader.nextLine() else {
+        guard var line = aStreamReader.nextLine() else {
             return nil
         }
         
@@ -189,6 +189,14 @@ class Parser {
         case "!":
             let regex = try? NSRegularExpression(pattern: #"!(.*?) (.*)"#)
             if let match = regex?.firstMatch(in: line, options: [], range: NSRange(location: 0, length: line.utf16.count)) {
+                switch line[Range(match.range(at: 1), in: line)!].lowercased() {
+                case "choice":
+                    content.choiceScene = Choice()
+                case "fight":
+                    content.fightScene = Fight()
+                default:
+                    content.runGMWith = String(line[Range(match.range(at: 1), in: line)!])
+                }
                 content.runGMWith = String(line[Range(match.range(at: 1), in: line)!])
                 text = String(line[line.index(line.startIndex, offsetBy: 1)...])
             }
@@ -201,6 +209,11 @@ class Parser {
                 content.alignment = Alignment.center
             default:
                 content.isBlockquote = true
+                var nextline = ""
+                repeat {
+                    nextline = aStreamReader.nextLine() ?? ""
+                    line += nextline
+                } while nextline.prefix(1) == ">"
             }
         
         case "-":

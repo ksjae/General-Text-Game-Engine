@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 // Action generator for battle, market, etc.
 
@@ -36,11 +37,11 @@ func nextLevelXPRequirement(level: Int) -> Int {
 
 class Fight {
     // Each Fight() is for a fight scene.
-    var player: Player
-    var allies: [Actor]
-    var enemies: [Creature]
+    var player: Player!
+    var allies: [Actor]!
+    var enemies: [Creature]!
     
-    init (player: Player, allies: [Actor], enemies: [Creature]) {
+    func setup (player: Player, allies: [Actor], enemies: [Creature]) {
         self.allies = allies
         self.enemies = enemies
         self.player = player
@@ -80,8 +81,12 @@ class Fight {
         }
     }
     
-    func getFightResult() -> Dictionary<String, Any> {
-        return ["allies": self.allies]
+    func getFightResult() -> (player: Player, allies: [Actor]) {
+        return (self.player, self.allies)
+    }
+    
+    func render() -> some View {
+        return BattleView()
     }
 }
 

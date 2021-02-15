@@ -19,7 +19,6 @@ struct ContentView: View {
     @State private var fontSize = 14
     @StateObject var viewRouter: ViewRouter
     
-    let contents = [["text":"여러분만의 게임 만들기, 원래는 어려웠습니다. 하지만 와따 스튜디오의 GTGE는 이 모든 것을 쉽게 만들어 드립니다. 글만 쓰면 당신만의 게임을 만들 수 있습니다. 단순한 코딩을 통해 다양한 게임을 만들 수 있습니다. 유니티로 텍스트 기반 게임을 만들려 하면서 얼마나 괴로우셨나요. 그래서 내놓았습니다 - General Text Game Engine."],["image":"generic"],["text": "이렇게 보시는 것처럼, 그림을 비롯한 다양한 미디어 파일 지원도 포함됩니다. 모던한 텍스트 어드벤쳐를 지원하기 딱 좋은 엔진이죠. 최신 SwiftUI 기반으로 돌아가기 때문에 모든 Apple 플랫폼에서 돌아갑니다. 맥, 아이폰, 아이패드 모든 환경에서 막힘없이 돌아가죠."],["text":"DSL을 이용한 로직 설계도 계획 중이니, 추후 업데이트를 유심히 팔로우 해주시면 감사하겠습니다. (꾸벅)"]]
     let gm = GM(player: Player(name: "John Apple", description: "", stat: Stat(STR: 2, DEX: 0, CON: 1, INT: 1, WIS: 0, CHA: 1), hp: 12, charClass: Classes.Rogue, race: Races.Human))
     var parser: Parser = Parser(filename: "Introduction")
     
@@ -30,12 +29,7 @@ struct ContentView: View {
                     LazyVStack {
                         let contents = parser.parseAll()
                         ForEach(contents, id: \.self) { content in
-                            if let text = content.text {
-                                ParagraphView(textContent: text, fontSize: $fontSize)
-                            }
-                            if let image = content.imageName {
-                                ParagraphView(picturePath: image, fontSize: $fontSize)
-                            }
+                            ParagraphView(content: content, fontSize: $fontSize)
                         }
                         
                     }
@@ -57,17 +51,17 @@ struct ContentView: View {
 }
 
 struct ParagraphView: View {
-    @State var textContent: [RichTextPiece]?
-    @State var picturePath: String?
+    @State var content: Content
     @Binding var fontSize: Int
     var body: some View {
-        if let text = textContent {
-            renderInlineText(text)
+        if let text = content.text {
+            let actualFontSize = Double(self.fontSize) * content.fontMultiplier
+            renderInlineText(text, fontSize: actualFontSize)
                 .padding(.bottom)
                 .lineSpacing(CGFloat(self.fontSize)*0.3)
                 .layoutPriority(3)
         }
-        if let picture = picturePath {
+        if let picture = content.imageName {
             Image(picture)
                 .resizable()
                 .scaledToFill()
@@ -75,20 +69,20 @@ struct ParagraphView: View {
         }
     }
     
-    func renderInlineText(_ text: [RichTextPiece]) -> some View {
+    func renderInlineText(_ text: [RichTextPiece], fontSize: Double = 14) -> some View {
         return text.map {t in
             var atomView: Text = Text(t.text)
-            //var font: Font = Font.custom("KoPubWorldBatangPL", size: CGFloat(self.fontSize))
+            var font: Font = Font.custom("KoPubWorldBatangPL", size: CGFloat(fontSize))
             if t.type == .bold || t.type == .italicBold {
                 atomView = atomView.bold()
-                //font = Font.custom("KoPubWorldBatangPM", size: CGFloat(self.fontSize))
+                font = Font.custom("KoPubWorldBatangPM", size: CGFloat(fontSize))
             }
             if t.type == .italic || t.type == .italicBold {
                 atomView = atomView.italic()
             }
 
-            //return atomView.font(font)
-            return atomView
+            return atomView.font(font)
+            //return atomView
         }.reduce(Text(""), +)
     }
     
@@ -172,7 +166,7 @@ struct HUDView: View {
         .opacity(self.isShowing ? 1 : 0)
     }
 }
-
+//MARK: Settings
 struct SettingsView: View {
     @Binding var fontSize: Int
     let width: CGFloat
@@ -199,7 +193,7 @@ struct SettingsView: View {
         }.frame(width: width*0.6)
     }
 }
-
+//MARK: Player
 struct PlayerView: View {
     @State var player: Player
     
@@ -251,12 +245,21 @@ struct PlayerView: View {
 
 struct BattleView: View {
     var body: some View {
-        Text("Fight!")
+        ZStack {
+            // Backdrop here - Image()
+            // Left Player, Right Enemy
+            HStack {
+                Text("Player")
+                Text("Enemy")
+            }
+            // Action menu
+            Rectangle()
+        }
     }
 }
 
 
-//MARK: Merchant
+//MARK:- Merchant
 
 struct ItemView: View {
     @Binding var player: Player
@@ -301,7 +304,6 @@ struct MerchantView: View {
  
  */
 
-//MARK: Checkbox Field
 struct CheckboxField: View {
     let id: String
     let label: String
