@@ -117,7 +117,7 @@ struct Content: Hashable {
     
     var text: [RichTextPiece]?
     var fontMultiplier: Double = 1
-    var alignment: Alignment = Alignment.leading
+    var alignment: TextAlignment = TextAlignment.leading
     var imageName: String?
     var fightScene: Fight?
     var choiceScene: Choice?
@@ -145,12 +145,16 @@ class Parser {
     
     func loadFile(filename: String) {
         guard let actualPath = Bundle.main.url(forResource: filename, withExtension: "md") else {
-            print("FILE \(filename) NOT FOUND!!")
-            return
+            fatalError("FILE \(filename) NOT FOUND!!")
         }
         self.aStreamReader = StreamReader(path: actualPath)
         if self.aStreamReader == nil {
             print("loadFile failed for \(filename)")
+            self.aStreamReader = StreamReader(path: actualPath)
+            if self.aStreamReader == nil {
+                fatalError("loadFile failed for \(filename)")
+                
+            }
         }
     }
     
@@ -204,9 +208,9 @@ class Parser {
         case ">":
             switch line.prefix(2) {
             case ">>":
-                content.alignment = Alignment.trailing
+                content.alignment = TextAlignment.trailing
             case "><":
-                content.alignment = Alignment.center
+                content.alignment = TextAlignment.center
             default:
                 content.isBlockquote = true
                 var nextline = ""

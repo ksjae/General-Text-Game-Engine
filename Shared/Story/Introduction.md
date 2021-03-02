@@ -1,4 +1,4 @@
-# $player Journal
+# $player's Journal
 ## Chapter 1. The whispers in town
 
 King John the Third is having a **bad** time. He was injured, but there was no one that could save him.

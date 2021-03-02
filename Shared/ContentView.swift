@@ -19,7 +19,7 @@ struct ContentView: View {
     @State private var fontSize = 14
     @StateObject var viewRouter: ViewRouter
     
-    let gm = GM(player: Player(name: "John Apple", description: "", stat: Stat(STR: 2, DEX: 0, CON: 1, INT: 1, WIS: 0, CHA: 1), hp: 12, charClass: Classes.Rogue, race: Races.Human))
+    @State var gm = GM(player: Player(name: "John Apple", description: "", stat: Stat(STR: 2, DEX: 0, CON: 1, INT: 1, WIS: 0, CHA: 1), hp: 12, charClass: Classes.Rogue, race: Races.Human))
     var parser: Parser = Parser(filename: "Introduction")
     
     var body: some View {
@@ -29,7 +29,7 @@ struct ContentView: View {
                     LazyVStack {
                         let contents = parser.parseAll()
                         ForEach(contents, id: \.self) { content in
-                            ParagraphView(content: content, fontSize: $fontSize)
+                            ParagraphView(content: content, fontSize: $fontSize, player: $gm.player)
                         }
                         
                     }
@@ -53,6 +53,7 @@ struct ContentView: View {
 struct ParagraphView: View {
     @State var content: Content
     @Binding var fontSize: Int
+    @Binding var player: Player
     var body: some View {
         if let text = content.text {
             let actualFontSize = Double(self.fontSize) * content.fontMultiplier
@@ -60,6 +61,7 @@ struct ParagraphView: View {
                 .padding(.bottom)
                 .lineSpacing(CGFloat(self.fontSize)*0.3)
                 .layoutPriority(3)
+                .multilineTextAlignment(content.alignment)
         }
         if let picture = content.imageName {
             Image(picture)
@@ -71,7 +73,13 @@ struct ParagraphView: View {
     
     func renderInlineText(_ text: [RichTextPiece], fontSize: Double = 14) -> some View {
         return text.map {t in
-            var atomView: Text = Text(t.text)
+            var string = t.text
+            
+            //MARK: Replace to names
+            string = string.replacingOccurrences(of: "$player", with: player.name)
+            
+            
+            var atomView: Text = Text(string)
             var font: Font = Font.custom("KoPubWorldBatangPL", size: CGFloat(fontSize))
             if t.type == .bold || t.type == .italicBold {
                 atomView = atomView.bold()
@@ -238,6 +246,20 @@ struct PlayerView: View {
             .frame(width: width - 80, alignment: .center)
         }
         
+    }
+}
+
+//MARK:- Choice
+struct ChoiceView: View {
+    @Binding var selectedIndex: Int
+    var arrayOfNames: [String]
+    var body: some View {
+        Picker("Names", selection: $selectedIndex) {
+            ForEach(0 ..< arrayOfNames.count) {
+                Text(self.arrayOfNames[$0])
+            }
+        }
+        .pickerStyle(InlinePickerStyle())
     }
 }
 
